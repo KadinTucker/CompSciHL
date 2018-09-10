@@ -47,8 +47,8 @@ public class IntegerArrayList {
             this.increaseListCapacity();
         }
         this.size++;
-        for(int i = index; i < this.size - 1; i++) {
-            this.list[i + 1] = this.list[i];
+        for(int i = this.size; i > index; i--) {
+            this.list[i] = this.list[i - 1];
         }
         this.list[index] = x;
     }
@@ -65,20 +65,19 @@ public class IntegerArrayList {
      * Gets the item at the given index
      */
     public int get(int index) {
-        if(index >= this.size || index < 0) {
-            throw new ArrayIndexOutOfBoundsException("index '" + index + "' out of array bounds"); 
-        }
         return this.list[index];
     }
     
     /**
      * Removes the element at the given index
-     * TODO: store ranges? would that be more efficient? probs not
      */
     public void remove(int index) {
-        for(int i = this.size - 1; i >= index; i++) {
+        System.out.println("start remove");
+        for(int i = index; i < this.size - 1; i++) {
+            System.out.println(toString());
             this.list[i] = this.list[i + 1];
         }
+        System.out.println("end remove");
         this.size--;
     }
     
@@ -96,9 +95,31 @@ public class IntegerArrayList {
     public String toString() {
         String str = "[";
         for(int i = 0; i < this.size; i++) {
-            str = str + this.list[i] + ", ";
+            str = str + this.list[i];
+            if(i < this.size - 1) {
+                str += ", ";
+            }
         }
-        return str;
+        return str + "]";
+    }
+    
+    /**
+     * Main method; for testing
+     */
+    public static void main(String[] args) {
+        IntegerArrayList list = new IntegerArrayList();
+        list.add(5);
+        System.out.println(list.toString()); //[5]
+        list.add(7);
+        System.out.println(list.toString()); //[5, 7]
+        list.add(0, 3);
+        System.out.println(list.toString()); //[3, 5, 7]
+        list.add(2, 4);
+        System.out.println(list.toString()); //[3, 5, 4, 7]
+        list.remove(1);
+        System.out.println(list.toString()); //[3, 4, 7]
+        list.remove(0);
+        System.out.println(list.toString()); //[4, 7]
     }
 
 }
